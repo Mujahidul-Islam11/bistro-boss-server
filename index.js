@@ -68,6 +68,7 @@ async function run() {
       const result = await usersData.find().toArray();
       res.send(result);
     });
+
     app.get("/users/admin/:email",verifyToken, async(req, res)=>{
       const email = req.params.email;
       if(email !== req.decoded.email){
@@ -82,16 +83,19 @@ async function run() {
       res.send({isAdmin})
 
     })
+
     app.get("/menu", async (req, res) => {
       const result = await bistroMenu.find().toArray();
       res.send(result);
     });
+
     app.get("/menu/:id", async (req, res) => {
       const id = req.params.id;
       const query  = {_id : new ObjectId(id)}
       const result = await bistroMenu.find(query).toArray();
       res.send(result);
     });
+
     app.patch("/menu/:id",verifyToken, verifyAdmin, async (req, res) => {
       const data = req.body
       const id = req.params.id;
@@ -108,6 +112,7 @@ async function run() {
       const result = await bistroMenu.updateOne(query, updatedDoc)
       res.send(result);
     });
+
     app.post('/payments', async(req , res)=>{
       const payment = req.body
       const result =await paymentData.insertOne(payment)
@@ -117,22 +122,26 @@ async function run() {
       const deletedIds = await cartsData.deleteMany(query)
       res.send(result, deletedIds)
     })
+
     app.delete("/menu/:id",verifyToken, verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const query  = {_id : new ObjectId(id)}
       const result = await bistroMenu.deleteOne(query)
       res.send(result);
     });
+    
     app.post("/menu",verifyToken, verifyAdmin, async (req, res) => {
       const item = req.body
       const result = await bistroMenu.insertOne(item)
       res.send(result);
     });
+
     app.post("/carts", async (req, res) => {
       const cursor = req.body;
       const result = await cartsData.insertOne(cursor);
       res.send(result);
     });
+
     app.post("/users", async (req, res) => {
       const user = req.body;
       const query = { email: user.email };
@@ -146,6 +155,7 @@ async function run() {
       const result = await usersData.insertOne(user);
       res.send(result);
     });
+
     app.post('/create-payment-intent', async(req, res) =>{
       const {price} = req.body;
       const amount = parseInt(price*100)
@@ -159,12 +169,14 @@ async function run() {
       })
     })
 
+
     app.get("/carts", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
       const result = await cartsData.find(query).toArray();
       res.send(result);
     });
+    
     app.patch("/users/admin/:id", verifyToken,verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
